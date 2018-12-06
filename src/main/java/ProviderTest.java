@@ -25,10 +25,17 @@ public class ProviderTest extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof PsiIdentifier) {
-            if (element.getParent() instanceof PsiClassImpl) {
-                if (!(((PsiJavaFileImpl) (element.getParent().getParent())).getOriginalFile().getFileType() instanceof JavaClassFileType)) {
-                    VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File("D:\\Study" +
-                            "\\Research\\SimpleTest\\out\\production\\SimpleTest\\Test.class"));
+//            if (element.getText().contains("Test")) {
+            Object object = element.getParent().getParent();
+            if (
+                    (object instanceof PsiJavaFileImpl)
+                            && !(((PsiJavaFileImpl) object).getOriginalFile().getFileType() instanceof JavaClassFileType)
+            ) {
+                VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File("D:\\Study" +
+                        "\\Research\\SimpleTest\\out\\production\\"
+                        + element.getProject().getName()
+                        + "\\" + element.getText() + ".class"));
+                if (virtualFile != null) {
                     ClsFileImpl psiFile = (ClsFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);
                     PsiClass psiClass = (PsiClass) psiFile.getFirstChild();
                     PsiIdentifier psiIdentifier = psiClass.getNameIdentifier();
@@ -38,6 +45,7 @@ public class ProviderTest extends RelatedItemLineMarkerProvider {
                     System.out.println("1");
                 }
             }
+//            }
         }
     }
 }
