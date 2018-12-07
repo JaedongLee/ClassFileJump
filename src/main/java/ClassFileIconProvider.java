@@ -4,8 +4,10 @@ import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.highlighter.JavaClassFileType;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.*;
-import com.intellij.psi.impl.compiled.ClsFileImpl;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiIdentifier;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,34 +16,31 @@ import java.util.Collection;
 
 /**
  * @author zou tairan
- * @since 2018/12/4
+ * @since 2018/12/7
  */
-public class ProviderTest extends RelatedItemLineMarkerProvider {
-    private int count = 0;
-
+public class ClassFileIconProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof PsiIdentifier) {
-//            if (element.getText().contains("Test")) {
             Object object = element.getParent().getParent();
             if (
                     (object instanceof PsiJavaFileImpl)
-                            &&
-                            !(((PsiJavaFileImpl) object).getOriginalFile().getFileType() instanceof JavaClassFileType)
+                            && (((PsiJavaFileImpl) object).getOriginalFile().getFileType() instanceof JavaClassFileType)
             ) {
+                String path = element.getProject().getBasePath();
                 VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(
-                        PathCache.CLASS_FILE_DIR_PATH + element.getProject().getName()
-                                + "\\" + element.getText() + ".class"));
+                        PathCache.SOURCE_FILE_DIR_PATH + "\\" + element.getProject().getName()
+                                + "\\" + "src" + "\\" + element.getText() + ".java"));
                 if (virtualFile != null) {
-                    ClsFileImpl psiFile = (ClsFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);
-                    PsiClass psiClass = (PsiClass) psiFile.getFirstChild();
+                    PsiJavaFileImpl psiJavaFile =
+                            (PsiJavaFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);
+                    PsiClassImpl psiClass = (PsiClassImpl) psiJavaFile.getChildren()[1];
                     PsiIdentifier psiIdentifier = psiClass.getNameIdentifier();
                     NavigationGutterIconBuilder<PsiElement> builder =
                             NavigationGutterIconBuilder.create(TestIcon.JUMP_TO_SOURCE_FILE).setTarget(psiIdentifier).setTooltipText("Jump To Source File");
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
-//            }
         }
     }
 }

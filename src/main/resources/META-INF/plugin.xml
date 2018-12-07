@@ -16,6 +16,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="ProviderTest"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="ClassFileIconProvider"/>
     </extensions>
 
     <actions>
