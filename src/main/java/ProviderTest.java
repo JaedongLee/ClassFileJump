@@ -30,7 +30,7 @@ public class ProviderTest extends RelatedItemLineMarkerProvider {
                             !(((PsiJavaFileImpl) object).getOriginalFile().getFileType() instanceof JavaClassFileType)
             ) {
                 VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(
-                        PathCache.CLASS_FILE_DIR_PATH + element.getProject().getName()
+                        Utils.getProjectCompiledFolderPath(element.getProject())
                                 + "\\" + element.getText() + ".class"));
                 if (virtualFile != null) {
                     ClsFileImpl psiFile = (ClsFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);

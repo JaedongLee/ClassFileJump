@@ -2,6 +2,7 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -29,8 +30,7 @@ public class ClassFileIconProvider extends RelatedItemLineMarkerProvider {
             ) {
                 String path = element.getProject().getBasePath();
                 VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(
-                        PathCache.SOURCE_FILE_DIR_PATH + "\\" + element.getProject().getName()
-                                + "\\" + "src" + "\\" + element.getText() + ".java"));
+                        Utils.getProjectSourcePath(element.getProject()) + "\\" + element.getText() + ".java"));
                 if (virtualFile != null) {
                     PsiJavaFileImpl psiJavaFile =
                             (PsiJavaFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);

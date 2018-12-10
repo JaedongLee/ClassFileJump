@@ -1,3 +1,7 @@
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.WriteAction;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
