@@ -15,11 +15,14 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="ProviderTest"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="SourceFileIconProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA" implementationClass="ClassFileIconProvider"/>
     </extensions>
 
     <actions>
-        <!-- Add your actions here -->
+        <action class="Action" id="Action" text="ClassFileJump Setting"
+                description="input the output path">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>

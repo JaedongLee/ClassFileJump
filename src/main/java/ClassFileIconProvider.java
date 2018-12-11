@@ -2,7 +2,6 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.highlighter.JavaClassFileType;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -37,7 +36,7 @@ public class ClassFileIconProvider extends RelatedItemLineMarkerProvider {
                     PsiClassImpl psiClass = (PsiClassImpl) psiJavaFile.getChildren()[1];
                     PsiIdentifier psiIdentifier = psiClass.getNameIdentifier();
                     NavigationGutterIconBuilder<PsiElement> builder =
-                            NavigationGutterIconBuilder.create(TestIcon.JUMP_TO_SOURCE_FILE).setTarget(psiIdentifier).setTooltipText("Jump To Source File");
+                            NavigationGutterIconBuilder.create(Icon.JUMP_TO_SOURCE_FILE).setTarget(psiIdentifier).setTooltipText("Jump To Source File");
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }

@@ -16,7 +16,7 @@ import java.util.Collection;
  * @author zou tairan
  * @since 2018/12/4
  */
-public class ProviderTest extends RelatedItemLineMarkerProvider {
+public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
     private int count = 0;
 
     @Override
@@ -37,7 +37,7 @@ public class ProviderTest extends RelatedItemLineMarkerProvider {
                     PsiClass psiClass = (PsiClass) psiFile.getFirstChild();
                     PsiIdentifier psiIdentifier = psiClass.getNameIdentifier();
                     NavigationGutterIconBuilder<PsiElement> builder =
-                            NavigationGutterIconBuilder.create(TestIcon.JUMP_TO_SOURCE_FILE).setTarget(psiIdentifier).setTooltipText("Jump To Source File");
+                            NavigationGutterIconBuilder.create(Icon.JUMP_TO_SOURCE_FILE).setTarget(psiIdentifier).setTooltipText("Jump To Source File");
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
