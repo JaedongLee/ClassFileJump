@@ -2,6 +2,8 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -27,9 +29,20 @@ public class ClassFileIconProvider extends RelatedItemLineMarkerProvider {
                     (object instanceof PsiJavaFileImpl)
                             && (((PsiJavaFileImpl) object).getOriginalFile().getFileType() instanceof JavaClassFileType)
             ) {
-                String path = element.getProject().getBasePath();
-                VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(
-                        Utils.getProjectSourcePath(element.getProject()) + "\\" + element.getText() + ".java"));
+                // todo 181213 find out why module instance is null
+                Module module = ModuleUtil.findModuleForPsiElement(element);
+                String[] sourceRootUrls = Utils.getModuleSourcePath(module);
+                VirtualFile virtualFile = null;
+                for (int i = 0; i < sourceRootUrls.length; i++) {
+                    VirtualFile temp = LocalFileSystem.getInstance().findFileByIoFile(new File(
+                            sourceRootUrls[i]
+                                    + "\\" + ((PsiJavaFileImpl) (element.getContainingFile())).getPackageName()
+                                    + "\\" + element.getText() + ".java"));
+                    if (temp != null) {
+                        virtualFile = temp;
+                        break;
+                    }
+                }
                 if (virtualFile != null) {
                     PsiJavaFileImpl psiJavaFile =
                             (PsiJavaFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);

@@ -1,4 +1,9 @@
+import com.intellij.openapi.fileChooser.*;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComponentWithBrowseButton;
+import com.intellij.openapi.ui.TextBrowseFolderListener;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.siyeh.ig.ui.TextField;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -9,11 +14,21 @@ public class Dialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField testTextField;
+//    private FileTextField fileTextField;
+    private TextFieldWithBrowseButton textFieldWithBrowseButton;
 
     public Dialog() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+
+//        fileTextField =
+//                FileChooserFactory.getInstance().createFileTextField(FileChooserDescriptorFactory.createSingleFolderDescriptor(), null);
+        textFieldWithBrowseButton = new TextFieldWithBrowseButton(testTextField,
+                new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor(),
+                        project));
+        textFieldWithBrowseButton.addBrowseFolderListener("browse test", "browse test description", project
+                , FileChooserDescriptorFactory.createSingleFolderDescriptor());
 
         buttonOK.addActionListener(new ActionListener() {
             @Override
@@ -50,7 +65,9 @@ public class Dialog extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void onOK() throws Exception {
+
+
+    private void onOK() {
         // add your code here
         OutputPathCache.outputPathMap.put(project.getName(), testTextField.getText());
         System.out.println(OutputPathCache.outputPathMap.entrySet().toString());
@@ -75,5 +92,15 @@ public class Dialog extends JDialog {
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+        testTextField = new JTextField();
+        textFieldWithBrowseButton = new TextFieldWithBrowseButton(testTextField,
+                new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor(),
+                        project));
+        textFieldWithBrowseButton.addBrowseFolderListener("browse test", "browse test description", project
+                , FileChooserDescriptorFactory.createSingleFolderDescriptor());
     }
 }
