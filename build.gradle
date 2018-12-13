@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.zoutairan'
-version '1.0-SNAPSHOT'
+version '0.001'
 
 sourceCompatibility = 1.8
 
@@ -21,7 +21,10 @@ intellij {
     sandboxDirectory = "$project.buildDir/myCustom-sandbox"
 }
 patchPluginXml {
-    changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    changeNotes "publish in first time"
+}
+
+publishPlugin {
+    username intellijPublishUsername
+    password intellijPublishPassword
 }

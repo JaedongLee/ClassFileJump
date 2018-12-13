@@ -32,4 +32,8 @@ public class Utils {
     public static String getModuleCompiledFolderPath(Module module) {
         return CompilerModuleExtension.getInstance(module).getCompilerOutputUrl();
     }
+
+    public static String convertPackageNameToPath(String packageName) {
+        return packageName.replace(".", "\\");
+    }
 }

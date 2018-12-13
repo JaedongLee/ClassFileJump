@@ -7,7 +7,6 @@ import com.siyeh.ig.ui.TextField;
 
 import javax.swing.*;
 import java.awt.event.*;
-// todo 181212 将输入框的文本换成选择文件夹
 public class Dialog extends JDialog {
     private Project project;
     private JPanel contentPane;

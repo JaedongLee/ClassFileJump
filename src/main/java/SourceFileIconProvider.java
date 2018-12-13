@@ -30,7 +30,6 @@ public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
     @Override
     protected void collectNavigationMarkers(@NotNull PsiElement element, @NotNull Collection<? super RelatedItemLineMarkerInfo> result) {
         if (element instanceof PsiIdentifier) {
-//            if (element.getText().contains("Test")) {
             Object object = element.getParent().getParent();
             if (
                     (object instanceof PsiJavaFileImpl)
@@ -39,7 +38,8 @@ public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
             ) {
                 Project project = element.getProject();
                 Module module = ModuleUtil.findModuleForPsiElement(element);
-                String buildOutputUrl = CompilerModuleExtension.getInstance(module).getCompilerOutputUrl();
+                VirtualFile[] moduleCompiledOutputRoots =
+                        CompilerModuleExtension.getInstance(module).getOutputRoots(false);
                 ArrayList<String> outputUrls = new ArrayList<>();
                 Artifact[] artifacts = ArtifactManager.getInstance(project).getArtifacts();
                 if (artifacts.length > 0) {
@@ -47,19 +47,25 @@ public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
                         outputUrls.add(artifacts[i].getOutputPath());
                     }
                 }
-                if (buildOutputUrl != null && buildOutputUrl.length() > 0) {
-                    outputUrls.add(buildOutputUrl);
+                if (moduleCompiledOutputRoots.length > 0) {
+                    for (int i = 0; i < moduleCompiledOutputRoots.length; i++) {
+                        outputUrls.add(moduleCompiledOutputRoots[i].getPath());
+                    }
                 }
                 ArrayList<PsiIdentifier> targetPsiIdentifiers = new ArrayList<>();
                 for (int i = 0; i < outputUrls.size(); i++) {
                     VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByIoFile(new File(
-                                    outputUrls.get(i)
-                                    + "\\" + ((PsiJavaFileImpl) (element.getContainingFile())).getPackageName()
+                            outputUrls.get(i)
+                                    + "\\" + Utils.convertPackageNameToPath(((PsiJavaFileImpl) (element.getContainingFile())).getPackageName())
                                     + "\\" + element.getText() + ".class"));
                     if (virtualFile != null) {
                         ClsFileImpl psiFile = (ClsFileImpl) PsiManager.getInstance(element.getProject()).findFile(virtualFile);
-                        PsiClass psiClass = (PsiClass) psiFile.getFirstChild();
-                        targetPsiIdentifiers.add(psiClass.getNameIdentifier());
+                        PsiClass[] psiClasses = psiFile.getClasses();
+                        for (int j = 0; j < psiClasses.length; j++) {
+                            if (psiClasses[j].getName().equals(element.getText())) {
+                                targetPsiIdentifiers.add(psiClasses[j].getNameIdentifier());
+                            }
+                        }
                     }
                 }
                 if (targetPsiIdentifiers.size() > 0) {
@@ -68,7 +74,6 @@ public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
                     result.add(builder.createLineMarkerInfo(element));
                 }
             }
-//            }
         }
     }
 }
