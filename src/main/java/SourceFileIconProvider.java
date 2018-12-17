@@ -2,6 +2,7 @@ import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
 import com.intellij.ide.highlighter.JavaClassFileType;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtil;
 import com.intellij.openapi.project.Project;
@@ -39,8 +40,16 @@ public class SourceFileIconProvider extends RelatedItemLineMarkerProvider {
                 Project project = element.getProject();
                 Module module = ModuleUtil.findModuleForPsiElement(element);
                 VirtualFile[] moduleCompiledOutputRoots =
-                        CompilerModuleExtension.getInstance(module).getOutputRoots(false);
+                        new VirtualFile[0];
+                if (module != null) {
+                    moduleCompiledOutputRoots = CompilerModuleExtension.getInstance(module).getOutputRoots(false);
+                }
                 ArrayList<String> outputUrls = new ArrayList<>();
+                String customOutputPath =
+                        PropertiesComponent.getInstance(project).getValue(GeneralEnum.OUTPUT_PATH.get());
+                if (customOutputPath != null) {
+                    outputUrls.add(customOutputPath);
+                }
                 Artifact[] artifacts = ArtifactManager.getInstance(project).getArtifacts();
                 if (artifacts.length > 0) {
                     for (int i = 0; i < artifacts.length; i++) {

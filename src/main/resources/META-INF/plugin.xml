@@ -5,9 +5,11 @@
 
     <description><![CDATA[
     Jump between .class file and source file
+    Automatic obtain project and module output path
+    If project is built by third party tool like gradle, output path can be set in Tools-CompiledFileJumper Setting
     ]]></description>
 
-    <version>0.001</version>
+    <version>0.002</version>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -23,9 +25,9 @@
     </extensions>
 
     <actions>
-        <!--<action class="Action" id="Action" text="ClassFileJump Setting"-->
-                <!--description="input the output path">-->
-            <!--<add-to-group group-id="ToolsMenu" anchor="last"/>-->
-        <!--</action>-->
+        <action class="Action" id="Action" text="CompiledFileJumper Setting"
+                description="input the output path">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
     </actions>
 </idea-plugin>
