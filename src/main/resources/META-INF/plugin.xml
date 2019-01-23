@@ -1,15 +1,15 @@
 <idea-plugin>
-    <id>com.zoutairan.CompiledFileJumper</id>
-    <name>Compiled File Jumper</name>
-    <vendor email="one@zoutairan.com" url="http://www.zoutairan.com">1nfinity</vendor>
+    <id>com.zoutairan.OutputJumper</id>
+    <name>Output Jumper</name>
+    <vendor email="one@zoutairan.com" url="http://jaedonglee.github.io">1nfinity</vendor>
 
     <description><![CDATA[
-    Jump between .class file and source file
-    Automatic obtain project and module output path
-    If project is built by third party tool like gradle, output path can be set in Tools-CompiledFileJumper Setting
+    <p>Jump between output compiled files and source files</p>
+    <p>Automatic obtain project and module output path</p>
+    <p>If project is built by third party tool like gradle, output path can be set in Tools - Output Jumper Setting</p>
     ]]></description>
 
-    <version>0.002</version>
+    <version>v0.003a</version>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
@@ -25,9 +25,9 @@
     </extensions>
 
     <actions>
-        <action class="Action" id="Action" text="CompiledFileJumper Setting"
+        <action class="Action" id="Action" text="OutputJumper Setting"
                 description="input the output path">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>

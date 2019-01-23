@@ -13,6 +13,7 @@ public class Action extends AnAction {
         Dialog dialogTest = new Dialog();
         dialogTest.setProject(currentProject);
         dialogTest.pack();
+        dialogTest.setLocationRelativeTo(null);
         dialogTest.setVisible(true);
     }
 }

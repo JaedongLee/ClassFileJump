@@ -8,6 +8,7 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.siyeh.ig.ui.TextField;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class Dialog extends JDialog {
@@ -15,14 +16,14 @@ public class Dialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField testTextField;
     private TextFieldWithBrowseButton textFieldWithBrowseButton;
+    private JTextField textField;
 
     public Dialog() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        textFieldWithBrowseButton = new TextFieldWithBrowseButton(testTextField,
+        textFieldWithBrowseButton = new TextFieldWithBrowseButton(textField,
                 new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor(),
                         project));
         textFieldWithBrowseButton.addBrowseFolderListener("browse test", "browse test description", project
@@ -43,14 +44,13 @@ public class Dialog extends JDialog {
                 onCancel();
             }
         });
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,7 +61,7 @@ public class Dialog extends JDialog {
 
     private void onOK() {
         PropertiesComponent propertiesComponent = PropertiesComponent.getInstance(project);
-        propertiesComponent.setValue(GeneralEnum.OUTPUT_PATH.get(), testTextField.getText());
+        propertiesComponent.setValue(GeneralEnum.OUTPUT_PATH.get(), textField.getText());
         dispose();
     }
 
@@ -85,11 +85,18 @@ public class Dialog extends JDialog {
     }
 
     private void createUIComponents() {
-        testTextField = new JTextField();
-        textFieldWithBrowseButton = new TextFieldWithBrowseButton(testTextField,
+        textField = new JTextField();
+        textFieldWithBrowseButton = new TextFieldWithBrowseButton(textField,
                 new TextBrowseFolderListener(FileChooserDescriptorFactory.createSingleFolderDescriptor(),
                         project));
         textFieldWithBrowseButton.addBrowseFolderListener("browse test", "browse test description", project
                 , FileChooserDescriptorFactory.createSingleFolderDescriptor());
+    }
+
+    public static void centreWindow(Window frame) {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+        frame.setLocation(x, y);
     }
 }
