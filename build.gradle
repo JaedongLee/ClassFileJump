@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.zoutairan'
-version 'v0.003a'
+version 'v0.003b'
 
 sourceCompatibility = 1.8
 
@@ -17,11 +17,11 @@ dependencies {
 }
 
 intellij {
-    version '2018.2.4'
+    version '2019.1.1'
     sandboxDirectory = "$project.buildDir/myCustom-sandbox"
 }
 patchPluginXml {
-    changeNotes "First Release"
+    changeNotes "Fit to 2019.1.1"
 }
 
 publishPlugin {
